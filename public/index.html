@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenClaw Assistant</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Iconify Library -->
+  <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+</head>
+<body>
+  <!-- Float Orb Mode -->
+  <div class="mini-orb" id="mini-orb" style="display: none;">
+    <video class="mini-orb-avatar" id="mini-orb-video" autoplay muted loop playsinline>
+      <source src="lobster-idle.mp4" type="video/mp4">
+    </video>
+    <!-- Expand button -->
+    <button class="mini-expand-btn" id="mini-expand-btn" title="Expand">
+      <span class="iconify" data-icon="mdi:arrow-expand"></span>
+    </button>
+    <!-- Listening pulse indicator -->
+    <div class="mini-pulse"></div>
+  </div>
+
+  <div class="widget-container" id="widget-container">
+    <!-- Speech Bubble (Above character) -->
+    <div class="speech-bubble" id="speech-bubble" style="display: none;">
+      <div class="bubble-content" id="bubble-text"></div>
+      <div class="bubble-arrow"></div>
+    </div>
+
+    <!-- Status Hint -->
+    <div class="status-hint" id="status-hint"></div>
+
+    <!-- Character Area -->
+    <div class="lobster-area" id="lobster-area">
+      <canvas id="aura-canvas"></canvas>
+      <!-- Listening pulse ring -->
+      <div class="listening-pulse-ring hidden" id="listening-pulse-ring">
+        <div class="ring-3"></div>
+      </div>
+      <video class="lobster-character" id="lobster-char" autoplay muted playsinline>
+        <source src="lobster-welcome.mp4" type="video/mp4">
+      </video>
+      <!-- Click guide -->
+      <div class="tap-hint" id="tap-hint">
+        <span class="iconify tap-icon" data-icon="mdi:gesture-tap"></span>
+        <span class="tap-text">Click me to start a conversation</span>
+      </div>
+    </div>
+
+    <!-- Bottom Status Indicators -->
+    <div class="bottom-bar">
+      <div class="state-indicator" id="state-indicator">
+        <span class="state-dot"></span>
+        <span class="state-text" id="state-text">Click me to start a conversation</span>
+      </div>
+      <div class="widget-controls">
+        <button id="character-select-btn" class="tiny-btn" title="Switch Character">
+          <span class="iconify" data-icon="mdi:account-switch"></span>
+        </button>
+        <button id="voice-select-btn" class="tiny-btn" title="Switch Voice">
+          <span class="iconify" data-icon="mdi:music-note"></span>
+        </button>
+        <button id="minimize-btn" class="tiny-btn" title="Minimize">
+          <span class="iconify" data-icon="mdi:minus"></span>
+        </button>
+        <button id="close-btn" class="tiny-btn close" title="Close">
+          <span class="iconify" data-icon="mdi:close"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Text Input Area -->
+    <div class="text-input-area" id="text-input-area">
+      <input type="text" id="text-input" class="text-input" placeholder="Type to chat..." />
+      <button id="send-btn" class="send-btn" title="Send">
+        <span class="iconify" data-icon="mdi:send"></span>
+      </button>
+    </div>
+
+    <!-- Character Selection Panel -->
+    <div class="character-panel" id="character-panel" style="display: none;">
+      <div class="character-panel-header">
+        <span class="character-panel-title">Select Character</span>
+        <button id="close-character-panel" class="tiny-btn">
+          <span class="iconify" data-icon="mdi:close"></span>
+        </button>
+      </div>
+      <div class="character-list" id="character-list"></div>
+    </div>
+
+    <!-- Voice Selection Panel -->
+    <div class="voice-panel" id="voice-panel" style="display: none;">
+      <div class="voice-panel-header">
+        <span class="voice-panel-title">Select Voice</span>
+        <button id="close-voice-panel" class="tiny-btn">
+          <span class="iconify" data-icon="mdi:close"></span>
+        </button>
+      </div>
+      <div class="voice-filter">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="zh">Chinese</button>
+        <button class="filter-btn" data-filter="en">English</button>
+      </div>
+      <div class="voice-list" id="voice-list"></div>
+    </div>
+  </div>
+
+  <script src="orb.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
