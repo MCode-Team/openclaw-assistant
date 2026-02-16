@@ -430,6 +430,11 @@ function clawdbotRequest(method, params = {}) {
   });
 }
 
+// Check for missing scope error
+function isScopeError(errorMessage) {
+  return errorMessage && (errorMessage.includes('missing scope') || errorMessage.includes('permission denied'));
+}
+
 // Send chat message to Clawdbot (supports streaming sentence distribution)
 async function chatWithClawdbot(message) {
   try {
@@ -493,10 +498,16 @@ async function chatWithClawdbot(message) {
           // 1. Process direct response of chat.send request (error detection)
           if (msg.type === 'res' && msg.id === chatReqId) {
             if (!msg.ok) {
-              console.error('[Clawdbot] chat.send request rejected:', msg.error?.message || JSON.stringify(msg.error));
+              const errMsg = msg.error?.message || JSON.stringify(msg.error);
+              console.error('[Clawdbot] chat.send request rejected:', errMsg);
               clawdbotWs.removeListener('message', chatHandler);
               clearTimeout(timeout);
-              reject(new Error(msg.error?.message || 'chat.send request failed'));
+
+              if (isScopeError(errMsg)) {
+                reject(new Error(`Permission denied: The provided token lacks 'operator.write' scope. Please use a token with write permissions.`));
+              } else {
+                reject(new Error(errMsg || 'chat.send request failed'));
+              }
               return;
             }
             console.log('[Clawdbot] chat.send request accepted');
