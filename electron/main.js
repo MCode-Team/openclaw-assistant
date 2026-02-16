@@ -169,10 +169,15 @@ let deepgramClient = null;
 let deepgramLive = null;
 let currentSender = null;
 
-// ===== Clawdbot WebSocket Configuration =====
-const CLAWDBOT_PORT = process.env.CLAWDBOT_PORT || 18789;
-const CLAWDBOT_TOKEN = process.env.CLAWDBOT_TOKEN || '6d4c9e5c78347a57af8f13136c162033f49229840cbe3c69';
-const CLAWDBOT_WS_URL = `ws://localhost:${CLAWDBOT_PORT}`;
+// ===== OpenClaw Gateway WebSocket Configuration =====
+const OPENCLAW_PORT = process.env.OPENCLAW_GATEWAY_PORT || 18789;
+const OPENCLAW_TOKEN = process.env.OPENCLAW_GATEWAY_TOKEN || '';
+const OPENCLAW_WS_URL = `ws://localhost:${OPENCLAW_PORT}`;
+
+if (!OPENCLAW_TOKEN) {
+  console.error('[OpenClaw] ⚠️  No OPENCLAW_GATEWAY_TOKEN set in .env');
+  console.error('[OpenClaw] Find your token: cat ~/.openclaw/openclaw.json | grep token');
+}
 
 let clawdbotWs = null;
 let clawdbotConnected = false;
@@ -303,8 +308,8 @@ function connectClawdbot() {
   }
 
   return new Promise((resolve, reject) => {
-    console.log(`[Clawdbot] Connecting to ${CLAWDBOT_WS_URL}...`);
-    clawdbotWs = new WebSocket(CLAWDBOT_WS_URL);
+    console.log(`[Clawdbot] Connecting to ${OPENCLAW_WS_URL}...`);
+    clawdbotWs = new WebSocket(OPENCLAW_WS_URL);
 
     const timeout = setTimeout(() => {
       reject(new Error('Clawdbot connection timeout'));
@@ -329,14 +334,14 @@ function connectClawdbot() {
               minProtocol: 3,
               maxProtocol: 3,
               client: {
-                id: 'gateway-client',
+                id: 'openclaw-probe',
                 version: '1.0.0',
                 platform: 'electron',
                 mode: 'backend'
               },
               role: 'operator',
               scopes: ['operator.read', 'operator.write'],
-              auth: { token: CLAWDBOT_TOKEN }
+              auth: { token: OPENCLAW_TOKEN }
             }
           }));
         }
